@@ -22,4 +22,7 @@ public class PedidoEntidade {
         this.dataEntrega = dataEntrega;
         this.descricao = descricao;
     }
+
+    public PedidoEntidade() {
+    }
 }

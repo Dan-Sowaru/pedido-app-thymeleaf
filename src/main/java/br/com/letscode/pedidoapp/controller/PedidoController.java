@@ -36,7 +36,7 @@ public class PedidoController {
     @PostMapping("/cadastrar-pedido")
     public RedirectView cadastrarPedido(CadastrarPedidoDTO cadastrarPedidoDTO) {
         PedidoService pedidoService = new PedidoService();
-        pedidoService.cadastrarPedido(CadastrarPedidoDTO);
+        pedidoService.cadastrarPedido(cadastrarPedidoDTO);
         RedirectView view = new RedirectView("/pedidos/listar", true);
         return view;
     }
