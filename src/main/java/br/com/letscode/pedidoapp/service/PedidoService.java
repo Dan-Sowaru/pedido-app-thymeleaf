@@ -4,6 +4,9 @@ import br.com.letscode.pedidoapp.dto.CadastrarPedidoDTO;
 import br.com.letscode.pedidoapp.dto.RetornoPedidoDTO;
 import br.com.letscode.pedidoapp.entity.PedidoEntidade;
 import br.com.letscode.pedidoapp.repository.PedidoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -11,16 +14,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
+@RequiredArgsConstructor
 public class PedidoService {
 
-    private PedidoRepository pedidoRepository;
+    private final PedidoRepository pedidoRepository;
+    private final EmailService emailService;
+
+
+
+
+//    Em vez do @RequiredArgsConstuctor,
+
+//    @Autowired
+//    private PedidoRepository pedidoRepository;
+//    @Autowired
+//    private EmailService emailService;
+
+//    Autowired faz o mesmo que isso aqui abaixo:
+//    public PedidoService(PedidoRepository pedidoRepository, EmailService emailService) {
+//        this.pedidoRepository = pedidoRepository;
+//        this.emailService = emailService;
+//    }
+//    Também da pra usar Autowired nos Setters ou Attributes dos objetos pra injetar sozinho (nao usuario preencher);
 
     public void cadastrarPedido(CadastrarPedidoDTO cadastrarPedidoDTO) {
 
-        pedidoRepository = new PedidoRepository();
-
-        EnviarEmailService enviarEmailService = new EnviarEmailService();
-        enviarEmailService.enviar(cadastrarPedidoDTO.getEmail());
+        emailService.enviar(cadastrarPedidoDTO.getEmail());
 
         PedidoEntidade pedidoEntidade = new PedidoEntidade();
         pedidoEntidade.setProduto(cadastrarPedidoDTO.getProduto());
@@ -34,7 +54,7 @@ public class PedidoService {
     }
 
     public List<RetornoPedidoDTO> listarTodosOsPedidos() {
-        pedidoRepository = new PedidoRepository();
+
         List<PedidoEntidade> entidades = pedidoRepository.getAll();
         List<RetornoPedidoDTO> listaRetorno = entidades.stream()
                 .map(entidade -> fromEntidadeToRetornoPedidoDTO(entidade))
